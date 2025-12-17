@@ -1,0 +1,37 @@
+{
+  "name": "ai-proposal-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Generate 2-page client-facing proposals from AI Process Audit reports",
+  "main": "cli.js",
+  "bin": {
+    "ai-proposal": "./cli.js"
+  },
+  "scripts": {
+    "generate": "node cli.js generate",
+    "validate": "node cli.js validate",
+    "test": "node test_run/run_pipeline_test.js"
+  },
+  "keywords": [
+    "proposal",
+    "ai",
+    "automation",
+    "pdf",
+    "audit"
+  ],
+  "author": "",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "commander": "^12.1.0",
+    "dotenv": "^17.2.3",
+    "mustache": "^4.2.0",
+    "puppeteer": "^23.11.1",
+    "uuid": "^10.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

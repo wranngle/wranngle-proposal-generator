@@ -1,0 +1,110 @@
+{
+  "document": {
+    "document_id": "audit-2024-001",
+    "created_at": "2024-12-10T10:00:00Z",
+    "title": "AI Process Audit Report"
+  },
+  "prepared_for": {
+    "account_name": "Example Manufacturing Corp",
+    "industry": "manufacturing",
+    "primary_contact": {
+      "name": "Jane Smith",
+      "title": "Operations Director",
+      "email": "contact@example.com"
+    }
+  },
+  "prepared_by": {
+    "producer_name": "Your Company Name",
+    "producer_email": "contact@example.com"
+  },
+  "scorecard": {
+    "categories": [
+      {
+        "category_name": "Order Processing",
+        "status": "critical",
+        "findings": [
+          "Manual data entry between ERP and CRM creates 4-hour delays",
+          "Order validation requires 3 separate system checks",
+          "No automated inventory verification"
+        ]
+      },
+      {
+        "category_name": "Customer Communication",
+        "status": "warning",
+        "findings": [
+          "Order confirmations sent manually via email",
+          "No automated status updates to customers",
+          "Support tickets not linked to orders"
+        ]
+      },
+      {
+        "category_name": "Inventory Management",
+        "status": "critical",
+        "findings": [
+          "Stock levels updated via CSV import twice daily",
+          "Reorder points calculated manually in spreadsheets",
+          "No real-time visibility across warehouses"
+        ]
+      },
+      {
+        "category_name": "Reporting",
+        "status": "warning",
+        "findings": [
+          "Weekly reports compiled manually from 5 data sources",
+          "No real-time dashboard for operations",
+          "Historical data siloed in department spreadsheets"
+        ]
+      }
+    ]
+  },
+  "revenue_bleed": {
+    "monthly_total": {
+      "amount": 8500,
+      "currency": "USD",
+      "display": "$8,500"
+    },
+    "breakdown": [
+      { "category": "Manual data entry labor", "amount": 3200 },
+      { "category": "Order processing delays", "amount": 2800 },
+      { "category": "Inventory discrepancy costs", "amount": 1500 },
+      { "category": "Report compilation time", "amount": 1000 }
+    ]
+  },
+  "recommended_fixes": [
+    {
+      "id": "fix_001",
+      "problem": "Manual order entry between systems",
+      "fix": "Implement bi-directional API integration between ERP and CRM",
+      "impact": "Eliminate 4-hour processing delays, reduce errors by 90%",
+      "effort_tier": "complex"
+    },
+    {
+      "id": "fix_002",
+      "problem": "No automated customer notifications",
+      "fix": "Build automated order status notification system with webhooks",
+      "impact": "Reduce support calls by 40%, improve customer satisfaction",
+      "effort_tier": "moderate"
+    },
+    {
+      "id": "fix_003",
+      "problem": "Delayed inventory updates",
+      "fix": "Real-time inventory sync across all warehouse systems",
+      "impact": "Prevent stockouts, reduce carrying costs",
+      "effort_tier": "complex"
+    },
+    {
+      "id": "fix_004",
+      "problem": "Manual reporting compilation",
+      "fix": "Automated data warehouse with real-time dashboards",
+      "impact": "Save 8+ hours weekly, enable data-driven decisions",
+      "effort_tier": "moderate"
+    }
+  ],
+  "executive_summary": {
+    "key_finding": "Manual processes across order management, inventory, and reporting are creating $8,500/month in operational bleed through labor inefficiency, processing delays, and inventory discrepancies."
+  },
+  "workflow": {
+    "name": "Order-to-Fulfillment Process",
+    "systems_involved": ["SAP ERP", "Salesforce CRM", "Custom Warehouse System", "Excel Spreadsheets"]
+  }
+}

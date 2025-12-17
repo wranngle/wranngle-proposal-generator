@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "LLM prompt registry for proposal narrative generation",
+  "version": "1.0.0",
+  "prompts": [
+    {
+      "prompt_id": "executive_summary_proposal_v1",
+      "description": "Generate 2-3 sentence executive summary referencing audit findings",
+      "schema_path": "executive_summary.body",
+      "output_type": "string",
+      "system_prompt": "<role>\nYou are a professional proposal writer for Wranngle, an AI automation consultancy.\n</role>\n<context>\nYou are writing Phase 2 proposals that follow completed Phase 1 audits. The goal is to bridge the gap between identified problems and the proposed solution.\n</context>\n<guidelines>\nWrite concise, client focused executive summaries.\nUse a professional but warm tone.\nAvoid corporate jargon.\nFocus strictly on business outcomes and ROI.\n</guidelines>",
+      "user_prompt_template": "<data>\nClient: {{client_name}}\nIndustry: {{industry}}\nAudit Date: {{audit_date}}\nRevenue Bleed: {{bleed_amount}}\nKey Findings: {{key_findings}}\nWorkflow Analyzed: {{workflow_name}}\nPhase 2 Price: {{total_price}}\n</data>\n<instructions>\nWrite a 2 to 3 sentence executive summary.\nExplicitly reference the completed audit and its findings.\nPosition Phase 2 implementation as the necessary solution to stop the revenue bleed.\nEmphasize the ROI.\nDo not use bullet points.\n</instructions>",
+      "output_constraints": {
+        "max_length": 500,
+        "forbidden_phrases": [
+          "I recommend",
+          "We will",
+          "Phase 0",
+          "Discovery"
+        ],
+        "required_elements": [
+          "audit reference",
+          "value proposition"
+        ]
+      },
+      "approval_required": false
+    },
+    {
+      "prompt_id": "value_proposition_v1",
+      "description": "Generate a single-sentence value proposition",
+      "schema_path": "executive_summary.value_proposition",
+      "output_type": "string",
+      "system_prompt": "<role>\nYou are a specialist in writing punchy, benefit focused value propositions for AI automation proposals.\n</role>\n<constraints>\nWrite exactly one sentence.\nFocus on the transformation from the current inefficient state to the desired future outcome.\nDo not use dashes or hyphens.\n</constraints>",
+      "user_prompt_template": "<data>\nClient: {{client_name}}\nIndustry Context: {{industry}}\nCurrent Problem: {{bleed_amount}} per month in operational inefficiency\nProposed Solution: AI powered workflow automation\nExpected Outcome: Recover lost revenue within {{payback_months}} months\n</data>\n<instructions>\nWrite a single sentence value proposition.\nMake it specific to the client industry context.\nHighlight the speed of revenue recovery.\n</instructions>",
+      "output_constraints": {
+        "max_length": 300,
+        "forbidden_phrases": [
+          "cutting-edge",
+          "revolutionary",
+          "game-changing"
+        ]
+      },
+      "approval_required": false
+    },
+    {
+      "prompt_id": "milestone_description_v1",
+      "description": "Generate milestone description paragraph",
+      "schema_path": "phases[1].milestones[*].description",
+      "output_type": "string",
+      "system_prompt": "<role>\nYou write clear, professional milestone descriptions for technical implementation proposals.\n</role>\n<guidelines>\nBe specific about what will be accomplished.\nUse active voice.\nKeep descriptions to 2 or 3 sentences.\nWrite complete sentences without trailing ellipsis.\n</guidelines>",
+      "user_prompt_template": "<context>\nClient: {{client_name}} ({{industry}})\nWorkflow: {{workflow_name}}\nMilestone: Number {{milestone_number}} named {{milestone_name}}\nAllocation: {{price_allocation}} ({{percentage}} percent of total)\nDuration: {{duration}}\n</context>\n<deliverables>\n{{deliverables}}\n</deliverables>\n<instructions>\nWrite a 2 to 3 sentence description for this milestone.\nDescribe the specific accomplishments and the resulting business value.\nOutput only complete sentences.\n</instructions>",
+      "output_constraints": {
+        "max_length": 350,
+        "forbidden_phrases": [
+          "phase 0",
+          "discovery phase",
+          "..."
+        ]
+      },
+      "approval_required": false
+    },
+    {
+      "prompt_id": "phase_description_v1",
+      "description": "Generate phase overview description",
+      "schema_path": "phases[*].description",
+      "output_type": "string",
+      "system_prompt": "<role>\nYou write concise phase descriptions for the Wranngle three phase engagement model: Audit, Stabilize, Scale.\n</role>\n<instructions>\nExplain the purpose and outcome of the phase in 1 or 2 sentences.\nEnsure clarity on where the phase fits in the project lifecycle.\n</instructions>",
+      "user_prompt_template": "<data>\nPhase Number: {{phase_number}}\nPhase Name: {{phase_name}}\nPhase State: {{state}}\nClient: {{client_name}}\nIndustry: {{industry}}\n</data>\n<instructions>\nWrite a 1 or 2 sentence description.\nFor Phase 1 Audit: Reference that it is complete and mention the Traffic Light Report delivery.\nFor Phase 2 Stabilize: Describe the implementation work.\nFor Phase 3 Scale: Describe future optimization and expansion opportunities.\n</instructions>",
+      "output_constraints": {
+        "max_length": 150
+      },
+      "approval_required": false
+    },
+    {
+      "prompt_id": "scope_in_items_v1",
+      "description": "Generate in-scope items list with technical detail",
+      "schema_path": "scope.in_scope",
+      "output_type": "array_of_strings",
+      "system_prompt": "<role>\nYou are a Technical Proposal Architect.\n</role>\n<instructions>\nGenerate clear, specific In Scope items for technical implementation proposals.\nEach item must be a complete, standalone statement.\nInclude specific technical details to build client confidence.\nRefer to integration methods like REST API or webhooks, automation platforms like n8n or Make, and data formats like JSON.\n</instructions>\n<examples>\nBad: Connect the systems together\nGood: Implement bi directional API integration between System A and System B using REST APIs with OAuth 2.0 authentication\n</examples>",
+      "user_prompt_template": "<context>\nClient: {{client_name}} ({{industry}})\nSystems Involved: {{systems_list}}\nKey Fixes from Audit: {{key_findings}}\nWorkflow: {{workflow_name}}\n</context>\n<instructions>\nGenerate 4 to 6 In Scope items for this automation project.\nFor each item, specify technical details such as integration methods, automation approach, or data handling.\nList specific, technically detailed deliverables that ARE included in this engagement.\n</instructions>",
+      "output_constraints": {
+        "min_items": 4,
+        "max_items": 6,
+        "item_max_length": 150
+      },
+      "approval_required": false
+    },
+    {
+      "prompt_id": "scope_out_items_v1",
+      "description": "Generate out-of-scope items list",
+      "schema_path": "scope.out_of_scope",
+      "output_type": "array_of_strings",
+      "system_prompt": "<role>\nYou generate clear Out of Scope statements for technical proposals.\n</role>\n<guidelines>\nClarify what is NOT included to prevent scope creep.\nFrame exclusions professionally as boundary setting rather than limitations.\nEnsure statements are definitive.\n</guidelines>",
+      "user_prompt_template": "<context>\nClient: {{client_name}} ({{industry}})\nIn Scope Systems: {{systems_list}}\nWorkflow: {{workflow_name}}\n</context>\n<instructions>\nGenerate 3 to 5 Out of Scope items for this project.\nConsider common exclusions like third party system changes, hardware procurement, legacy data migration, ongoing maintenance, or custom integrations not listed in scope.\n</instructions>",
+      "output_constraints": {
+        "min_items": 3,
+        "max_items": 5,
+        "item_max_length": 80
+      },
+      "approval_required": false
+    },
+    {
+      "prompt_id": "assumptions_v1",
+      "description": "Generate project assumptions list",
+      "schema_path": "scope.assumptions",
+      "output_type": "array_of_strings",
+      "system_prompt": "<role>\nYou generate reasonable project assumptions for technical implementations.\n</role>\n<instructions>\nIdentify conditions that the project plan depends on.\nBe specific and realistic regarding client and system requirements.\n</instructions>",
+      "user_prompt_template": "<context>\nClient: {{client_name}} ({{industry}})\nSystems: {{systems_list}}\nTimeline: {{timeline}}\nWorkflow: {{workflow_name}}\n</context>\n<instructions>\nGenerate 3 to 4 assumptions for this project.\nConsider assumptions regarding client availability, responsiveness, system access, credentials, data quality, and stakeholder decision making.\n</instructions>",
+      "output_constraints": {
+        "min_items": 3,
+        "max_items": 4,
+        "item_max_length": 100
+      },
+      "approval_required": false
+    },
+    {
+      "prompt_id": "cta_headline_v1",
+      "description": "Generate call-to-action headline",
+      "schema_path": "cta.headline",
+      "output_type": "string",
+      "system_prompt": "<role>\nYou write compelling, professional Call to Action headlines for B2B proposals.\n</role>\n<constraints>\nKeep it action oriented.\nFocus on the benefit.\nDo not use exclamation points.\nWrite complete sentences without trailing ellipsis.\n</constraints>",
+      "user_prompt_template": "<data>\nClient: {{client_name}}\nProposal Value: {{total_price}}\nKey Benefit: Recover {{annual_recovery}} per year in operational efficiency\nPayback Period: {{payback_months}} months\n</data>\n<instructions>\nWrite a CTA headline for the client to approve this proposal.\nMake it action oriented and specific to their situation.\nOutput a single complete sentence.\n</instructions>",
+      "output_constraints": {
+        "max_length": 120,
+        "forbidden_phrases": [
+          "Act now",
+          "Don't miss",
+          "Limited time",
+          "..."
+        ]
+      },
+      "approval_required": false
+    },
+    {
+      "prompt_id": "cta_subtext_v1",
+      "description": "Generate call-to-action supporting text",
+      "schema_path": "cta.subtext",
+      "output_type": "string",
+      "system_prompt": "<role>\nYou write brief supporting text for proposal CTAs.\n</role>\n<instructions>\nWrite one sentence explaining the next step or adding urgency professionally.\nWrite complete sentences without trailing ellipsis.\n</instructions>",
+      "user_prompt_template": "<data>\nClient: {{client_name}}\nPlatform: {{platform}}\nValid Until: {{valid_until}}\n</data>\n<instructions>\nWrite CTA subtext.\nInclude the validity date naturally.\nFor Upwork platforms, mention milestone escrow.\nFor direct clients, mention scheduling a kickoff call.\nOutput a complete sentence.\n</instructions>",
+      "output_constraints": {
+        "max_length": 180,
+        "forbidden_phrases": [
+          "..."
+        ]
+      },
+      "approval_required": false
+    },
+    {
+      "prompt_id": "final_html_review_v1",
+      "description": "Final review pass on complete HTML proposal for coherence and quality",
+      "schema_path": "_final_html",
+      "output_type": "html_document",
+      "system_prompt": "<role>\nYou are a professional document editor performing final quality assurance on a client facing proposal.\n</role>\n<task>\nReview the complete HTML document and make targeted corrections.\n</task>\n<priorities>\nConsistency: Ensure client name, pricing, dates, and milestones match throughout.\nCoherence: Ensure narrative flow.\nProfessionalism: Fix awkward phrasing and grammar.\nCompleteness: Check for empty sections.\nFormatting: Ensure valid HTML structure.\n</priorities>\n<constraints>\nMake MINIMAL changes.\nDo NOT change CSS, JavaScript, or HTML structure.\nDo NOT change pricing numbers, dates, or milestone allocations.\nDo NOT add new sections or remove existing content.\nONLY fix text content issues.\nReturn the COMPLETE HTML document with corrections.\nIf no corrections are needed, return the document unchanged.\n</constraints>",
+      "user_prompt_template": "<context>\nClient: {{client_name}}\nTotal Investment: {{total_price}}\nPlatform: {{platform}}\n</context>\n<document_content>\n{{html_content}}\n</document_content>\n<instructions>\nReview and correct this proposal HTML document.\nMake only necessary text corrections for consistency, coherence, and professionalism.\nReturn the complete corrected HTML.\n</instructions>",
+      "output_constraints": {
+        "preserve_structure": true,
+        "minimal_changes": true,
+        "forbidden_phrases": [
+          "[LLM_PLACEHOLDER",
+          "[TODO",
+          "[FIXME",
+          "lorem ipsum"
+        ]
+      },
+      "approval_required": false
+    }
+  ],
+  "placeholder_mapping": {
+    "executive_summary.body": "executive_summary_proposal_v1",
+    "executive_summary.value_proposition": "value_proposition_v1",
+    "phases[*].description": "phase_description_v1",
+    "phases[1].milestones[*].description": "milestone_description_v1",
+    "scope.in_scope": "scope_in_items_v1",
+    "scope.out_of_scope": "scope_out_items_v1",
+    "scope.assumptions": "assumptions_v1",
+    "cta.headline": "cta_headline_v1",
+    "cta.subtext": "cta_subtext_v1"
+  },
+  "batch_config": {
+    "max_concurrent": 5,
+    "retry_attempts": 2,
+    "timeout_ms": 30000
+  }
+}

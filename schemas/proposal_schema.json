@@ -1,0 +1,304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wranngle.com/schemas/proposal/v1.0.0",
+  "title": "Wranngle Proposal Schema",
+  "description": "Schema for 2-page client-facing proposals generated from AI Process Audit reports",
+  "type": "object",
+
+  "$defs": {
+    "money": {
+      "type": "object",
+      "properties": {
+        "amount": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "default": "USD" },
+        "display": { "type": "string", "description": "Formatted display string e.g. '$12,500'" }
+      },
+      "required": ["amount", "currency", "display"]
+    },
+
+    "duration": {
+      "type": "object",
+      "properties": {
+        "value": { "type": "number", "minimum": 0 },
+        "unit": { "type": "string", "enum": ["hours", "business_days", "weeks"] },
+        "display": { "type": "string" }
+      },
+      "required": ["value", "unit", "display"]
+    },
+
+    "deliverable": {
+      "type": "object",
+      "properties": {
+        "deliverable_id": { "type": "string" },
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "acceptance_criteria": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["name"]
+    },
+
+    "milestone": {
+      "type": "object",
+      "properties": {
+        "milestone_id": { "type": "string" },
+        "milestone_number": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
+        "milestone_name": { "type": "string" },
+        "description": { "type": "string" },
+        "deliverables": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/deliverable" }
+        },
+        "duration": { "$ref": "#/$defs/duration" },
+        "price_allocation": { "$ref": "#/$defs/money" }
+      },
+      "required": ["milestone_id", "milestone_number", "milestone_name"]
+    },
+
+    "phase": {
+      "type": "object",
+      "properties": {
+        "phase_id": { "type": "string" },
+        "phase_number": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "phase_name": { "type": "string", "enum": ["Audit", "Stabilize", "Scale"] },
+        "state": { "type": "string", "enum": ["complete", "current", "upcoming"] },
+        "description": { "type": "string" },
+        "milestones": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/milestone" }
+        }
+      },
+      "required": ["phase_id", "phase_number", "phase_name", "state"]
+    }
+  },
+
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+
+    "document": {
+      "type": "object",
+      "properties": {
+        "document_id": { "type": "string" },
+        "proposal_number": { "type": "string", "pattern": "^WRN-[0-9]{4}-[0-9]+$" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "valid_until": { "type": "string", "format": "date-time" },
+        "valid_days": { "type": "integer", "default": 14 },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "brand": {
+          "type": "object",
+          "properties": {
+            "brand_name": { "type": "string", "default": "Wranngle" },
+            "logo_uri": { "type": "string" },
+            "primary_domain": { "type": "string" }
+          }
+        }
+      },
+      "required": ["document_id", "proposal_number", "created_at", "valid_until", "title"]
+    },
+
+    "prepared_for": {
+      "type": "object",
+      "properties": {
+        "account_name": { "type": "string" },
+        "industry": { "type": "string" },
+        "primary_contact": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "title": { "type": "string" },
+            "email": { "type": "string", "format": "email" }
+          }
+        }
+      },
+      "required": ["account_name"]
+    },
+
+    "prepared_by": {
+      "type": "object",
+      "properties": {
+        "producer_name": { "type": "string" },
+        "producer_email": { "type": "string", "format": "email" }
+      },
+      "required": ["producer_name", "producer_email"]
+    },
+
+    "audit_reference": {
+      "type": "object",
+      "description": "Reference to completed Phase 1 Audit",
+      "properties": {
+        "audit_id": { "type": "string" },
+        "audit_date": { "type": "string" },
+        "workflow_name": { "type": "string" },
+        "bleed_total": { "$ref": "#/$defs/money" },
+        "bleed_period": { "type": "string", "enum": ["month", "year", "quarter"] },
+        "key_findings": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["audit_date", "bleed_total"]
+    },
+
+    "executive_summary": {
+      "type": "object",
+      "properties": {
+        "body": { "type": "string", "description": "2-3 sentence summary" },
+        "value_proposition": { "type": "string" }
+      },
+      "required": ["body"]
+    },
+
+    "pricing": {
+      "type": "object",
+      "properties": {
+        "currency": { "type": "string", "default": "USD" },
+        "pricing_model": { "type": "string", "enum": ["fixed_price", "time_and_materials", "retainer"] },
+        "total": { "$ref": "#/$defs/money" },
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "tier_id": { "type": "string" },
+              "tier_name": { "type": "string" },
+              "description": { "type": "string" },
+              "price": { "$ref": "#/$defs/money" },
+              "is_recommended": { "type": "boolean" }
+            }
+          }
+        },
+        "payment_schedule": {
+          "type": "object",
+          "properties": {
+            "schedule_type": { "type": "string", "enum": ["milestone_based", "monthly", "upfront"] },
+            "installments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "milestone_id": { "type": "string" },
+                  "label": { "type": "string" },
+                  "amount": { "$ref": "#/$defs/money" },
+                  "percentage": { "type": "number" },
+                  "due_event": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "platform_fees": {
+          "type": "object",
+          "properties": {
+            "platform": { "type": "string", "enum": ["upwork", "direct", "other"] },
+            "fee_percentage": { "type": "number" },
+            "fee_note": { "type": "string" }
+          }
+        }
+      },
+      "required": ["total", "pricing_model"]
+    },
+
+    "roi": {
+      "type": "object",
+      "properties": {
+        "monthly_recovery": { "$ref": "#/$defs/money" },
+        "annual_recovery": { "$ref": "#/$defs/money" },
+        "payback_period_months": { "type": "number" },
+        "payback_display": { "type": "string" }
+      }
+    },
+
+    "phases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/phase" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+
+    "scope": {
+      "type": "object",
+      "properties": {
+        "in_scope": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "change_control": { "type": "string" }
+      },
+      "required": ["in_scope", "out_of_scope", "change_control"]
+    },
+
+    "terms": {
+      "type": "object",
+      "properties": {
+        "validity_period": { "type": "string" },
+        "payment_terms": { "type": "string" },
+        "cancellation_policy": { "type": "string" },
+        "warranty_period": { "type": "string" },
+        "ip_ownership": { "type": "string" }
+      }
+    },
+
+    "cta": {
+      "type": "object",
+      "properties": {
+        "action_type": { "type": "string", "enum": ["approve_proposal", "book_call", "contact"] },
+        "headline": { "type": "string" },
+        "subtext": { "type": "string" },
+        "link": { "type": "string", "format": "uri" },
+        "link_display": { "type": "string" },
+        "secondary_action": {
+          "type": "object",
+          "properties": {
+            "label": { "type": "string" },
+            "link": { "type": "string", "format": "uri" }
+          }
+        },
+        "expires_display": { "type": "string" }
+      },
+      "required": ["action_type", "headline", "link"]
+    },
+
+    "rendering": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["proposal", "internal", "preview"] },
+        "platform": { "type": "string", "enum": ["upwork", "direct", "custom"] },
+        "page": {
+          "type": "object",
+          "properties": {
+            "size": { "type": "string", "default": "letter" },
+            "page_count": { "type": "integer", "const": 2 }
+          }
+        }
+      }
+    }
+  },
+
+  "required": [
+    "schema_version",
+    "document",
+    "prepared_for",
+    "prepared_by",
+    "audit_reference",
+    "executive_summary",
+    "pricing",
+    "phases",
+    "scope",
+    "cta",
+    "rendering"
+  ]
+}

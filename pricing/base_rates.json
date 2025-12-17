@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Wranngle base rates for proposal pricing calculation",
+  "version": "1.0.0",
+
+  "hourly_rates": {
+    "ai_engineering": {
+      "rate": 175,
+      "currency": "USD",
+      "description": "AI/ML model development, training, fine-tuning"
+    },
+    "integration_development": {
+      "rate": 150,
+      "currency": "USD",
+      "description": "API integrations, system connections, data pipelines"
+    },
+    "system_design": {
+      "rate": 165,
+      "currency": "USD",
+      "description": "Architecture design, technical specification"
+    },
+    "testing_qa": {
+      "rate": 125,
+      "currency": "USD",
+      "description": "Testing, validation, quality assurance"
+    },
+    "project_management": {
+      "rate": 100,
+      "currency": "USD",
+      "description": "Coordination, client communication, planning"
+    },
+    "training_documentation": {
+      "rate": 95,
+      "currency": "USD",
+      "description": "User training, documentation writing"
+    }
+  },
+
+  "effort_tiers": {
+    "trivial": {
+      "min_hours": 2,
+      "max_hours": 8,
+      "default_hours": 4,
+      "description": "Simple configuration changes, minor tweaks"
+    },
+    "moderate": {
+      "min_hours": 8,
+      "max_hours": 24,
+      "default_hours": 16,
+      "description": "Standard feature implementation, integrations"
+    },
+    "complex": {
+      "min_hours": 24,
+      "max_hours": 80,
+      "default_hours": 40,
+      "description": "Multi-system integration, custom development"
+    },
+    "critical": {
+      "min_hours": 40,
+      "max_hours": 160,
+      "default_hours": 80,
+      "description": "Major system overhaul, complex AI implementation"
+    }
+  },
+
+  "fixed_packages": {
+    "simple_automation": {
+      "min": 2500,
+      "max": 5000,
+      "typical": 3500,
+      "description": "Single workflow automation, basic AI integration"
+    },
+    "standard_implementation": {
+      "min": 7500,
+      "max": 15000,
+      "typical": 10000,
+      "description": "Multi-workflow automation, 2-3 system integration"
+    },
+    "complex_system": {
+      "min": 15000,
+      "max": 35000,
+      "typical": 22500,
+      "description": "Enterprise integration, custom AI development"
+    },
+    "enterprise_solution": {
+      "min": 35000,
+      "max": 75000,
+      "typical": 50000,
+      "description": "Full platform build, multiple AI components"
+    }
+  },
+
+  "milestone_allocation": {
+    "design": {
+      "percentage": 20,
+      "description": "Milestone 2.1: Architecture and planning"
+    },
+    "build": {
+      "percentage": 45,
+      "description": "Milestone 2.2: Development and integration"
+    },
+    "test": {
+      "percentage": 15,
+      "description": "Milestone 2.3: Testing and validation"
+    },
+    "deploy": {
+      "percentage": 20,
+      "description": "Milestone 2.4: Deployment and training"
+    }
+  },
+
+  "minimum_project_value": 2500,
+  "rounding_increment": 500,
+
+  "warranty": {
+    "standard_days": 30,
+    "description": "Bug fixes included post-deployment"
+  },
+
+  "payment_terms": {
+    "upwork": {
+      "type": "milestone_escrow",
+      "description": "Payment upon milestone approval via Upwork escrow"
+    },
+    "direct": {
+      "type": "invoice",
+      "net_days": 15,
+      "description": "Invoice upon milestone completion, NET 15"
+    }
+  }
+}

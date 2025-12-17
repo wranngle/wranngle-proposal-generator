@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Complexity multipliers for proposal pricing adjustment",
+  "version": "1.0.0",
+
+  "systems_count": {
+    "description": "Multiplier based on number of systems to integrate",
+    "ranges": {
+      "1-2": {
+        "multiplier": 1.0,
+        "description": "Simple integration scope"
+      },
+      "3-4": {
+        "multiplier": 1.15,
+        "description": "Moderate integration complexity"
+      },
+      "5-6": {
+        "multiplier": 1.30,
+        "description": "Complex multi-system integration"
+      },
+      "7+": {
+        "multiplier": 1.50,
+        "description": "Enterprise-level integration"
+      }
+    }
+  },
+
+  "integration_difficulty": {
+    "description": "Multiplier based on integration method availability",
+    "types": {
+      "api_available": {
+        "multiplier": 1.0,
+        "description": "Well-documented REST/GraphQL API available"
+      },
+      "webhook_only": {
+        "multiplier": 1.20,
+        "description": "Webhook-based integration, limited API"
+      },
+      "csv_import": {
+        "multiplier": 1.15,
+        "description": "Manual data import/export required"
+      },
+      "scraping_required": {
+        "multiplier": 1.50,
+        "description": "No API, web scraping or RPA needed"
+      },
+      "custom_connector": {
+        "multiplier": 1.75,
+        "description": "Custom connector development required"
+      }
+    }
+  },
+
+  "data_sensitivity": {
+    "description": "Multiplier for compliance and security requirements",
+    "levels": {
+      "standard": {
+        "multiplier": 1.0,
+        "description": "Standard business data"
+      },
+      "pii_present": {
+        "multiplier": 1.15,
+        "description": "Personal identifiable information handling"
+      },
+      "hipaa_phi": {
+        "multiplier": 1.35,
+        "description": "Healthcare PHI data (HIPAA compliance)"
+      },
+      "financial_regulated": {
+        "multiplier": 1.40,
+        "description": "Financial data (SOX, PCI compliance)"
+      },
+      "government_classified": {
+        "multiplier": 1.60,
+        "description": "Government or classified data handling"
+      }
+    }
+  },
+
+  "timeline_pressure": {
+    "description": "Multiplier for accelerated delivery timelines",
+    "speeds": {
+      "standard": {
+        "multiplier": 1.0,
+        "description": "Normal timeline (20+ business days)"
+      },
+      "expedited": {
+        "multiplier": 1.20,
+        "description": "Faster delivery (10-20 business days)"
+      },
+      "rush": {
+        "multiplier": 1.50,
+        "description": "Rush delivery (5-10 business days)"
+      },
+      "emergency": {
+        "multiplier": 2.0,
+        "description": "Emergency delivery (<5 business days)"
+      }
+    }
+  },
+
+  "client_technical_readiness": {
+    "description": "Adjustment based on client's technical preparation",
+    "levels": {
+      "highly_prepared": {
+        "multiplier": 0.95,
+        "description": "Documentation ready, APIs accessible, responsive IT"
+      },
+      "standard": {
+        "multiplier": 1.0,
+        "description": "Normal preparation level"
+      },
+      "limited_documentation": {
+        "multiplier": 1.10,
+        "description": "Missing documentation, discovery needed"
+      },
+      "legacy_systems": {
+        "multiplier": 1.25,
+        "description": "Outdated systems, limited technical resources"
+      }
+    }
+  },
+
+  "industry_complexity": {
+    "description": "Industry-specific complexity adjustments",
+    "industries": {
+      "technology": { "multiplier": 1.0 },
+      "professional_services": { "multiplier": 1.0 },
+      "retail_ecommerce": { "multiplier": 1.05 },
+      "manufacturing": { "multiplier": 1.10 },
+      "healthcare": { "multiplier": 1.25 },
+      "financial_services": { "multiplier": 1.20 },
+      "legal": { "multiplier": 1.15 },
+      "government": { "multiplier": 1.30 },
+      "education": { "multiplier": 1.05 }
+    }
+  }
+}

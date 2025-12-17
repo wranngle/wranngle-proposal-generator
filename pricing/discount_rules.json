@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Discount rules for proposal pricing",
+  "version": "1.0.0",
+
+  "volume_discounts": {
+    "description": "Discounts based on total project value",
+    "tiers": [
+      {
+        "min_value": 0,
+        "max_value": 9999,
+        "discount_percentage": 0,
+        "description": "No volume discount"
+      },
+      {
+        "min_value": 10000,
+        "max_value": 24999,
+        "discount_percentage": 5,
+        "description": "5% discount for $10K+ projects"
+      },
+      {
+        "min_value": 25000,
+        "max_value": 49999,
+        "discount_percentage": 8,
+        "description": "8% discount for $25K+ projects"
+      },
+      {
+        "min_value": 50000,
+        "max_value": null,
+        "discount_percentage": 12,
+        "description": "12% discount for $50K+ projects"
+      }
+    ]
+  },
+
+  "commitment_discounts": {
+    "description": "Discounts for long-term commitments",
+    "options": {
+      "single_project": {
+        "discount_percentage": 0,
+        "description": "Standard single project pricing"
+      },
+      "retainer_3_month": {
+        "discount_percentage": 10,
+        "description": "3-month retainer commitment"
+      },
+      "retainer_6_month": {
+        "discount_percentage": 15,
+        "description": "6-month retainer commitment"
+      },
+      "retainer_12_month": {
+        "discount_percentage": 20,
+        "description": "Annual retainer commitment"
+      }
+    }
+  },
+
+  "referral_discounts": {
+    "description": "Discounts for referred clients",
+    "first_project_discount": 5,
+    "description_text": "5% discount for first project from referral"
+  },
+
+  "early_payment_discounts": {
+    "description": "Discounts for upfront or early payment",
+    "options": {
+      "net_15": {
+        "discount_percentage": 0,
+        "description": "Standard NET 15 terms"
+      },
+      "net_0": {
+        "discount_percentage": 3,
+        "description": "3% discount for payment upon invoice"
+      },
+      "prepaid_50": {
+        "discount_percentage": 5,
+        "description": "5% discount for 50% upfront payment"
+      },
+      "prepaid_full": {
+        "discount_percentage": 8,
+        "description": "8% discount for full upfront payment"
+      }
+    }
+  },
+
+  "maximum_combined_discount": 25,
+  "discount_stacking": "highest_only",
+
+  "notes": {
+    "application": "Discounts apply to base price before taxes/fees",
+    "approval_required_above": 15,
+    "approval_required_note": "Discounts above 15% require manager approval"
+  }
+}

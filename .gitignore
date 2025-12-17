@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# Output files
+*.pdf
+*.html
+output/
+generated/
+test_output/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test artifacts
+test_run/output/
+
+# Old/archived files
+old/
+
+# Temporary files
+tmp/
+temp/
