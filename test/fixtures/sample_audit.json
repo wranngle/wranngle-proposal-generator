@@ -1,0 +1,82 @@
+{
+  "assessment_metadata": {
+    "assessment_id": "test-audit-001",
+    "assessment_date": "2024-12-01",
+    "assessment_type": "AI Process Audit",
+    "version": "1.0.0"
+  },
+  "client_info": {
+    "account_name": "Test Manufacturing Co",
+    "industry": "Manufacturing",
+    "company_size": "medium",
+    "primary_contact": "John Smith",
+    "contact_email": "john@testmfg.com"
+  },
+  "workflow_analyzed": "Invoice Processing",
+  "findings": [
+    {
+      "finding_id": "find-001",
+      "title": "Manual Invoice Data Entry",
+      "severity": "critical",
+      "complexity": "complex",
+      "description": "Invoices are manually entered into the ERP system",
+      "estimated_hours": 40,
+      "systems_involved": ["QuickBooks", "Excel", "Email"],
+      "revenue_bleed_monthly": 2500
+    },
+    {
+      "finding_id": "find-002",
+      "title": "Duplicate Payment Processing",
+      "severity": "high",
+      "complexity": "moderate",
+      "description": "No automated duplicate detection leads to overpayments",
+      "estimated_hours": 24,
+      "systems_involved": ["QuickBooks", "Bank Portal"],
+      "revenue_bleed_monthly": 1500
+    },
+    {
+      "finding_id": "find-003",
+      "title": "Missing Invoice Tracking",
+      "severity": "medium",
+      "complexity": "trivial",
+      "description": "No centralized tracking for invoice status",
+      "estimated_hours": 8,
+      "systems_involved": ["Excel"],
+      "revenue_bleed_monthly": 500
+    }
+  ],
+  "revenue_bleed": {
+    "monthly": 4500,
+    "annual": 54000,
+    "calculation_basis": "Sum of finding-level revenue bleed estimates"
+  },
+  "systems_inventory": [
+    {
+      "system_name": "QuickBooks",
+      "system_type": "ERP",
+      "integration_capability": "API available"
+    },
+    {
+      "system_name": "Excel",
+      "system_type": "Spreadsheet",
+      "integration_capability": "File-based"
+    },
+    {
+      "system_name": "Email",
+      "system_type": "Communication",
+      "integration_capability": "IMAP/API"
+    },
+    {
+      "system_name": "Bank Portal",
+      "system_type": "Financial",
+      "integration_capability": "Limited API"
+    }
+  ],
+  "recommendations": {
+    "primary": "Implement automated invoice processing workflow",
+    "secondary": [
+      "Add duplicate detection rules",
+      "Create invoice tracking dashboard"
+    ]
+  }
+}

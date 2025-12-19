@@ -1,0 +1,77 @@
+{
+  "executive_summary_proposal_v1": {
+    "response": "Following our comprehensive Phase 1 audit of Test Manufacturing Co's invoice processing workflow, we identified $4,500 in monthly operational inefficiency. This Phase 2 proposal outlines the implementation of automated invoice processing that will recover this revenue within 4 months of deployment.",
+    "tokens_used": 52
+  },
+  "value_proposition_v1": {
+    "response": "Transform your invoice processing from a $54,000 annual drain into an automated workflow that pays for itself in under 4 months.",
+    "tokens_used": 28
+  },
+  "milestone_description_v1": {
+    "design": {
+      "response": "Design the integration architecture connecting QuickBooks, email systems, and bank portal. Deliverables include technical specifications, data flow diagrams, and implementation timeline.",
+      "tokens_used": 32
+    },
+    "build": {
+      "response": "Implement the automated invoice processing workflow with API integrations to QuickBooks and email parsing capabilities. Build duplicate detection rules and automated data entry processes.",
+      "tokens_used": 35
+    },
+    "test": {
+      "response": "Execute comprehensive testing including alpha testing with historical invoices and beta testing with live invoice flow. Validate duplicate detection accuracy and data integrity.",
+      "tokens_used": 30
+    },
+    "deploy": {
+      "response": "Deploy the automated system to production, train staff on new workflows, and provide documentation for ongoing operations. Includes 2-week hypercare support period.",
+      "tokens_used": 29
+    }
+  },
+  "phase_description_v1": {
+    "phase_1": {
+      "response": "Phase 1 Audit has been completed, delivering the Traffic Light Report that identified the revenue bleed in invoice processing.",
+      "tokens_used": 22
+    },
+    "phase_2": {
+      "response": "Phase 2 Stabilize implements the automated invoice processing workflow to eliminate the identified operational inefficiencies.",
+      "tokens_used": 20
+    },
+    "phase_3": {
+      "response": "Phase 3 Scale will explore additional automation opportunities and optimizations based on the success of Phase 2.",
+      "tokens_used": 19
+    }
+  },
+  "scope_in_items_v1": {
+    "response": [
+      "Implement bi-directional API integration between QuickBooks and the automation platform using REST APIs",
+      "Build automated email parsing to extract invoice data from incoming vendor emails",
+      "Create duplicate detection rules with configurable matching thresholds",
+      "Develop automated data entry workflow for invoice creation in QuickBooks",
+      "Build invoice tracking dashboard with status visibility"
+    ],
+    "tokens_used": 65
+  },
+  "scope_out_items_v1": {
+    "response": [
+      "Modifications to QuickBooks core functionality",
+      "Hardware procurement or infrastructure changes",
+      "Historical data migration from legacy systems",
+      "Ongoing maintenance beyond initial 2-week hypercare"
+    ],
+    "tokens_used": 38
+  },
+  "assumptions_v1": {
+    "response": [
+      "Client provides QuickBooks API credentials within 5 business days of project start",
+      "Client designates a primary point of contact available for weekly status calls",
+      "Invoice volume remains within current baseline during implementation"
+    ],
+    "tokens_used": 42
+  },
+  "cta_headline_v1": {
+    "response": "Approve this proposal to start recovering your $54,000 annual revenue loss",
+    "tokens_used": 14
+  },
+  "cta_subtext_v1": {
+    "response": "This proposal is valid until December 15, 2024. Schedule your kickoff call to begin the Design milestone.",
+    "tokens_used": 22
+  }
+}

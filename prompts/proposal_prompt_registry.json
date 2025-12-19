@@ -1,7 +1,42 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "description": "LLM prompt registry for proposal narrative generation",
-  "version": "1.0.0",
+  "version": "2.0.0",
+  "principles": {
+    "precision": "Extract exact information from source material, never invent or round unless source does",
+    "no_hallucination": "Only facts from source material - set to null if not present, never speculate",
+    "provenance": "Track source of every data point (audit_report | pricing_config | llm_generated | calculated)",
+    "confidence": "Score certainty of generated content (1.0=explicit, 0.8=clear, 0.5=inferred, 0.0=generated)",
+    "flexibility": "ANY DIRECTIVE IS FLEXIBLE WITH ADDITIVE OR ENRICHING DIRECTIVES"
+  },
+  "quality_checks": {
+    "json_validity": "Strict JSON - no comments, no trailing commas",
+    "schema_compliance": "Output matches proposal_schema.json",
+    "reference_resolution": "All entity references must resolve",
+    "placeholder_removal": "No [LLM_PLACEHOLDER...] remains in output",
+    "forbidden_phrases": "None of blacklisted phrases present",
+    "length_constraints": "Within max_length limits",
+    "consistency": "Client name, pricing, dates match throughout"
+  },
+  "global_forbidden_phrases": [
+    "I recommend",
+    "I suggest",
+    "In my opinion",
+    "cutting-edge",
+    "revolutionary",
+    "game-changing",
+    "world-class",
+    "best-in-class",
+    "Act now",
+    "Don't miss",
+    "Limited time",
+    "Phase 0",
+    "...",
+    "[TODO]",
+    "[FIXME]",
+    "[LLM_PLACEHOLDER",
+    "lorem ipsum"
+  ],
   "prompts": [
     {
       "prompt_id": "executive_summary_proposal_v1",
@@ -44,17 +79,19 @@
     },
     {
       "prompt_id": "milestone_description_v1",
-      "description": "Generate milestone description paragraph",
+      "description": "Generate milestone description paragraph tailored to specific technical solutions",
       "schema_path": "phases[1].milestones[*].description",
       "output_type": "string",
-      "system_prompt": "<role>\nYou write clear, professional milestone descriptions for technical implementation proposals.\n</role>\n<guidelines>\nBe specific about what will be accomplished.\nUse active voice.\nKeep descriptions to 2 or 3 sentences.\nWrite complete sentences without trailing ellipsis.\n</guidelines>",
-      "user_prompt_template": "<context>\nClient: {{client_name}} ({{industry}})\nWorkflow: {{workflow_name}}\nMilestone: Number {{milestone_number}} named {{milestone_name}}\nAllocation: {{price_allocation}} ({{percentage}} percent of total)\nDuration: {{duration}}\n</context>\n<deliverables>\n{{deliverables}}\n</deliverables>\n<instructions>\nWrite a 2 to 3 sentence description for this milestone.\nDescribe the specific accomplishments and the resulting business value.\nOutput only complete sentences.\n</instructions>",
+      "system_prompt": "<role>\nYou write clear, professional milestone descriptions for technical implementation proposals.\n</role>\n<guidelines>\nBe specific about what will be accomplished in THIS milestone.\nReference the actual technical solutions being implemented.\nUse active voice.\nKeep descriptions to 2 or 3 sentences.\nWrite complete sentences without trailing ellipsis.\nMake descriptions bespoke to the client's specific workflow and systems.\n</guidelines>",
+      "user_prompt_template": "<context>\nClient: {{client_name}} ({{industry}})\nWorkflow: {{workflow_name}}\nSystems Involved: {{systems_list}}\nMilestone: Number {{milestone_number}} named {{milestone_name}}\nAllocation: {{price_allocation}} ({{percentage}} percent of total)\nDuration: {{duration}}\n</context>\n<technical_solutions_being_implemented>\n{{technical_solutions}}\n</technical_solutions_being_implemented>\n<deliverables_for_this_milestone>\n{{deliverables}}\n</deliverables_for_this_milestone>\n<instructions>\nWrite a 2 to 3 sentence description for this milestone.\nBe SPECIFIC to the client's actual workflow and the technical solutions listed above.\nFor Design: Focus on requirements gathering and architecture planning for the specific integrations.\nFor Build: Focus on implementing the specific automations and integrations listed.\nFor Test: Focus on validating the specific workflows against real business scenarios.\nFor Deploy: Focus on production deployment and user enablement for the specific systems.\nDo NOT be generic. Reference the actual systems and solutions being implemented.\nOutput only complete sentences.\n</instructions>",
       "output_constraints": {
-        "max_length": 350,
+        "max_length": 280,
         "forbidden_phrases": [
           "phase 0",
           "discovery phase",
-          "..."
+          "...",
+          "generic",
+          "various systems"
         ]
       },
       "approval_required": false

@@ -1,0 +1,31 @@
+{
+  "pricing": {
+    "hourly_rates": {
+      "automation_specialist": 125,
+      "integration_developer": 150,
+      "senior_engineer": 175,
+      "project_management": 100
+    },
+    "minimum_project_cost": 5000,
+    "complexity_multipliers": {
+      "trivial": 0.8,
+      "moderate": 1.0,
+      "complex": 1.3,
+      "critical": 1.5
+    },
+    "system_count_multipliers": {
+      "1-2": 1.0,
+      "3-5": 1.15,
+      "6-10": 1.3,
+      "10+": 1.5
+    }
+  },
+  "milestone_allocation": {
+    "design": 0.20,
+    "build": 0.45,
+    "test": 0.15,
+    "deploy": 0.20
+  },
+  "validity_days": 14,
+  "platform": "direct"
+}

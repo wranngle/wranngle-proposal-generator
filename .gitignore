@@ -35,3 +35,13 @@ old/
 # Temporary files
 tmp/
 temp/
+
+# Test coverage
+coverage/
+*.lcov
+
+# Vitest
+.vitest/
+
+# Test fixture temp files
+test/fixtures/temp/
