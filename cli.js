@@ -3,6 +3,9 @@
 /**
  * AI Proposal Generator CLI
  * Generate 2-page client-facing proposals from AI Process Audit reports
+ *
+ * Output is organized by company in the output directory:
+ *   output/{company}/proposal_{company}_{timestamp}.html
  */
 
 import 'dotenv/config';
@@ -11,36 +14,25 @@ import fs from 'fs';
 import path from 'path';
 
 import { generate, calculatePricingOnly, previewMilestones, renderFromJson } from './lib/pipeline.js';
+import { slugify, generateOutputPath, ensureDir } from './lib/file_utils.js';
 
 /**
- * Generate slugified, timestamped output filename
- * Format: proposal_{client_slug}_{YYYY-MM-DD}_{HHmmss}.{ext}
- * @param {string} clientName - Client name to slugify
+ * Generate organized output path for a proposal
+ * Uses company subdirectory for organization
+ *
+ * @param {string} clientName - Client name for folder/file naming
  * @param {string} ext - File extension (html, pdf, json)
- * @param {string} outputDir - Optional output directory
+ * @param {string} outputDir - Base output directory
  * @returns {string} Full path to output file
  */
-function generateOutputFilename(clientName, ext, outputDir = 'samples') {
-  const slug = slugify(clientName || 'client');
-  const now = new Date();
-  const date = now.toISOString().split('T')[0];
-  const time = now.toTimeString().slice(0, 8).replace(/:/g, '');
-
-  const filename = `proposal_${slug}_${date}_${time}.${ext}`;
-  return path.join(outputDir, filename);
-}
-
-/**
- * Convert string to URL-safe slug
- * @param {string} str - String to slugify
- * @returns {string} Slugified string
- */
-function slugify(str) {
-  return str
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '')
-    .slice(0, 50);
+function generateProposalOutputPath(clientName, ext, outputDir = 'output') {
+  const result = generateOutputPath({
+    outputDir,
+    type: 'proposal',
+    company: clientName || 'client',
+    ext
+  });
+  return result.path;
 }
 
 /**
@@ -81,7 +73,7 @@ program
   .option('--use-groq', 'Use Groq API instead of Gemini')
   .option('--template <file>', 'Custom HTML template')
   .option('-f, --force', 'Generate even if validation fails')
-  .option('-o, --output-dir <dir>', 'Output directory (default: samples)')
+  .option('-o, --output-dir <dir>', 'Output directory (default: output)')
   .action(async (auditPath, outputArg, options) => {
     try {
       // Validate API key
@@ -101,27 +93,30 @@ program
         process.exit(1);
       }
 
-      // Determine output path
+      // Determine output path - now uses organized structure: output/{company}/
       let outputPath;
       const clientName = extractClientName(auditPath);
 
       if (!outputArg) {
         // No output specified, auto-generate in default directory
-        const outputDir = options.outputDir || 'samples';
-        outputPath = generateOutputFilename(clientName, 'html', outputDir);
+        const outputDir = options.outputDir || 'output';
+        outputPath = generateProposalOutputPath(clientName, 'html', outputDir);
       } else if (fs.existsSync(outputArg) && fs.statSync(outputArg).isDirectory()) {
-        // Output is a directory, auto-generate filename
-        outputPath = generateOutputFilename(clientName, 'html', outputArg);
+        // Output is a directory, auto-generate organized filename
+        outputPath = generateProposalOutputPath(clientName, 'html', outputArg);
       } else if (outputArg.endsWith('/') || outputArg.endsWith('\\')) {
         // Output looks like a directory path, create it and generate filename
         const outputDir = outputArg.slice(0, -1);
-        if (!fs.existsSync(outputDir)) {
-          fs.mkdirSync(outputDir, { recursive: true });
-        }
-        outputPath = generateOutputFilename(clientName, 'html', outputDir);
+        ensureDir(outputDir);
+        outputPath = generateProposalOutputPath(clientName, 'html', outputDir);
       } else {
-        // Output is a specific filename
-        outputPath = outputArg;
+        // Output is a specific filename - organize into company subfolder
+        const dir = path.dirname(outputArg);
+        const filename = path.basename(outputArg);
+        const companySlug = slugify(clientName);
+        const organizedDir = path.join(dir, companySlug);
+        ensureDir(organizedDir);
+        outputPath = path.join(organizedDir, filename);
       }
 
       // Load additional requirements if provided

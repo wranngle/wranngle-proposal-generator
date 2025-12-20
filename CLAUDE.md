@@ -32,18 +32,18 @@ npm install
 cp .env.example .env
 # Edit .env with your API keys and company information
 
-# Generate proposal from audit report
-node cli.js generate <audit-report.json> <output.html>
+# Generate proposal from audit report (output auto-organized by company)
+node cli.js generate <audit-report.json> output/
 
 # With options
-node cli.js generate samples/sample_audit.json proposal.html --platform upwork --save-json
-node cli.js generate samples/sample_audit.json proposal.html --platform direct --valid-days 7
+node cli.js generate input/sample_audit.json output/ --platform upwork --save-json
+node cli.js generate input/sample_audit.json output/ --platform direct --valid-days 7
 
 # Utility commands
 node cli.js validate <proposal.json>
 node cli.js render <proposal.json> <output.html>
-node cli.js calculate-pricing <samples/sample_audit.json>
-node cli.js preview-milestones <samples/sample_audit.json>
+node cli.js calculate-pricing input/sample_audit.json
+node cli.js preview-milestones input/sample_audit.json
 ```
 
 ## Architecture
@@ -298,10 +298,39 @@ See `prompts/PROMPT_ENGINEERING_PRINCIPLES.md` for detailed guidelines.
 
 ---
 
+## Folder Structure
+
+All input and output files are organized for easy navigation:
+
+```
+wranngle-proposal-generator/
+├── input/                    # Input files (audit reports, requirements)
+│   ├── sample_audit.json
+│   └── ...
+├── output/                   # Generated proposals (organized by company)
+│   ├── {company_slug}/
+│   │   ├── proposal_{company}_{timestamp}.html
+│   │   ├── proposal_{company}_{timestamp}.json
+│   │   └── proposal_{company}_{timestamp}.pdf
+│   └── ...
+├── old/                      # Archived/historical files
+│   └── ...
+└── lib/                      # Core processing modules
+    ├── file_utils.js         # Shared file naming utilities
+    └── ...
+```
+
+**File Naming Convention:**
+- Format: `{type}_{company_slug}_{YYYYMMDD_HHmmss}.{ext}`
+- Example: `proposal_acme_corp_20251220_143025.html`
+
+**Utilities:**
+- `lib/file_utils.js` - Shared utilities for slugification, timestamps, and output path generation
+
 ## Quick Reference
 
 ### File Locations
-- **Audit Reports**: `samples/*.json`
+- **Audit Reports**: `input/*.json`
 - **Pricing Config**: `pricing/*.json`
 - **Schemas**: `schemas/proposal_schema.json`
 - **Templates**: `templates/proposal_template.html`
