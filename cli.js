@@ -64,18 +64,13 @@ program
 // Main generate command
 program
   .command('generate <audit> [output]')
-  .description('Generate proposal from audit report. Output can be a filename or directory (auto-generates timestamped name)')
+  .description('Generate proposal from audit report')
+  .option('-o, --output <path>', 'Output directory or file path')
   .option('-p, --platform <type>', 'Platform: "upwork" | "direct"', 'direct')
-  .option('-d, --valid-days <n>', 'Proposal validity period in days', parseInt, 14)
-  .option('-r, --requirements <file>', 'Additional scope requirements JSON')
-  .option('-c, --pricing-config <file>', 'Custom pricing configuration')
-  .option('--skip-pdf', 'Skip PDF generation (HTML only)')
-  .option('--skip-final-pass', 'Skip final HTML LLM polish pass')
-  .option('--save-json', 'Save intermediate proposal JSON')
-  .option('--use-groq', 'Use Groq API instead of Gemini')
-  .option('--template <file>', 'Custom HTML template')
-  .option('-f, --force', 'Generate even if validation fails')
-  .option('-o, --output-dir <dir>', 'Output directory (default: output)')
+  .option('--skip-pdf', 'Skip PDF generation')
+  .option('--save-json', 'Save intermediate JSON')
+  .option('--use-groq', 'Use Groq API')
+  .option('-f, --force', 'Force generation')
   .action(async (auditPath, outputArg, options) => {
     try {
       // Validate API key
@@ -95,61 +90,42 @@ program
         process.exit(1);
       }
 
-      // Determine output path - now uses organized structure: output/{company}/
+      // Determine output path - uses organized structure: output/{company}/
       let outputPath;
       const clientName = extractClientName(auditPath);
+      const outputTarget = options.output || outputArg || 'output';
 
-      if (!outputArg) {
-        // No output specified, auto-generate in default directory
-        const outputDir = options.outputDir || 'output';
-        outputPath = generateProposalOutputPath(clientName, 'html', outputDir);
-      } else if (fs.existsSync(outputArg) && fs.statSync(outputArg).isDirectory()) {
-        // Output is a directory, auto-generate organized filename
-        outputPath = generateProposalOutputPath(clientName, 'html', outputArg);
-      } else if (outputArg.endsWith('/') || outputArg.endsWith('\\')) {
-        // Output looks like a directory path, create it and generate filename
-        const outputDir = outputArg.slice(0, -1);
+      if (fs.existsSync(outputTarget) && fs.statSync(outputTarget).isDirectory()) {
+        outputPath = generateProposalOutputPath(clientName, 'html', outputTarget);
+      } else if (outputTarget.endsWith('/') || outputTarget.endsWith('\\')) {
+        const outputDir = outputTarget.slice(0, -1);
         ensureDir(outputDir);
         outputPath = generateProposalOutputPath(clientName, 'html', outputDir);
+      } else if (!outputTarget.endsWith('.html')) {
+        // Treat as directory
+        ensureDir(outputTarget);
+        outputPath = generateProposalOutputPath(clientName, 'html', outputTarget);
       } else {
         // Output is a specific filename - organize into company subfolder
-        const dir = path.dirname(outputArg);
-        const filename = path.basename(outputArg);
+        const dir = path.dirname(outputTarget);
+        const filename = path.basename(outputTarget);
         const companySlug = slugify(clientName);
         const organizedDir = path.join(dir, companySlug);
         ensureDir(organizedDir);
         outputPath = path.join(organizedDir, filename);
       }
 
-      // Load additional requirements if provided
-      let additionalContext = {};
-      if (options.requirements) {
-        additionalContext = JSON.parse(fs.readFileSync(options.requirements, 'utf8'));
-      }
-
-      // Load custom pricing config if provided
-      let pricingOptions = {};
-      if (options.pricingConfig) {
-        pricingOptions = JSON.parse(fs.readFileSync(options.pricingConfig, 'utf8'));
-      }
-
       console.log(`\nGenerating proposal from: ${auditPath}`);
       console.log(`Output: ${outputPath}`);
       console.log(`Platform: ${options.platform}`);
-      console.log(`Validity: ${options.validDays} days`);
       if (options.useGroq) console.log('Using: Groq API');
       console.log('');
 
       const result = await generate(auditPath, outputPath, {
         platform: options.platform,
-        validDays: options.validDays,
         skipPdf: options.skipPdf,
-        skipFinalPass: options.skipFinalPass,
         saveJson: options.saveJson,
         useGroq: options.useGroq,
-        templatePath: options.template,
-        additionalContext,
-        pricingOptions,
         force: options.force
       });
 
