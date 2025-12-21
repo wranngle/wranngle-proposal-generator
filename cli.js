@@ -36,16 +36,18 @@ function generateProposalOutputPath(clientName, ext, outputDir = 'output') {
 }
 
 /**
- * Extract client name from audit JSON
- * @param {string} auditPath - Path to audit JSON
+ * Extract client name from audit JSON or project plan
+ * @param {string} auditPath - Path to audit JSON or project_plan JSON
  * @returns {string} Client name or default
  */
 function extractClientName(auditPath) {
   try {
-    const audit = JSON.parse(fs.readFileSync(auditPath, 'utf8'));
-    return audit.client?.account_name ||
-           audit.prepared_for?.account_name ||
-           audit.company_name ||
+    const data = JSON.parse(fs.readFileSync(auditPath, 'utf8'));
+    return data.project_identity?.client_name ||
+           data.project?.client?.name ||
+           data.client?.account_name ||
+           data.prepared_for?.account_name ||
+           data.company_name ||
            'client';
   } catch {
     return 'client';

@@ -112,7 +112,7 @@
           "properties": {
             "name": { "type": "string" },
             "title": { "type": "string" },
-            "email": { "type": "string", "format": "email" }
+            "email": { "type": "string" }
           }
         }
       },
@@ -123,9 +123,9 @@
       "type": "object",
       "properties": {
         "producer_name": { "type": "string" },
-        "producer_email": { "type": "string", "format": "email" }
+        "producer_email": { "type": "string" }
       },
-      "required": ["producer_name", "producer_email"]
+      "required": ["producer_name"]
     },
 
     "audit_reference": {
@@ -258,13 +258,13 @@
         "action_type": { "type": "string", "enum": ["approve_proposal", "book_call", "contact"] },
         "headline": { "type": "string" },
         "subtext": { "type": "string" },
-        "link": { "type": "string", "format": "uri" },
+        "link": { "type": "string" },
         "link_display": { "type": "string" },
         "secondary_action": {
           "type": "object",
           "properties": {
             "label": { "type": "string" },
-            "link": { "type": "string", "format": "uri" }
+            "link": { "type": "string" }
           }
         },
         "expires_display": { "type": "string" }

@@ -148,6 +148,59 @@ ai-proposal-generator/
 └── samples/
 ```
 
+## Related Repositories
+
+This proposal generator is part of the Wranngle sales/proposal ecosystem:
+
+| Repository | Purpose | Data Flow |
+|------------|---------|-----------|
+| **ai_audit_report** | Traffic Light Reports | **Input** - audit findings drive proposals |
+| **ai_sales_engineering** | Project plan generation | Research enrichment, scope analysis |
+| **n8n_workflow_development** | Technical research & n8n workflows | Provides integration research library |
+
+### Ecosystem Flow
+
+```
+┌─────────────────────────────────┐
+│       ai_audit_report           │
+│   (Traffic Light Report)        │
+│   └─ audit_findings.json        │
+└────────────────┬────────────────┘
+                 │ audit findings
+                 ▼
+┌─────────────────────────────────┐
+│   wranngle-proposal-generator   │◄──────────────┐
+│   (This Repository)             │               │
+│   ├─ Dynamic pricing            │               │
+│   ├─ Milestone structure        │  project      │
+│   └─ 2-page PDF proposals       │  plans        │
+└─────────────────────────────────┘               │
+                                                  │
+┌─────────────────────────────────┐               │
+│     ai_sales_engineering        │───────────────┘
+│   └─ Project plan generation    │
+│   └─ Integration research       │
+└────────────────┬────────────────┘
+                 │ reads research
+                 ▼
+┌─────────────────────────────────┐
+│   n8n_workflow_development      │
+│   └─ context/technical-research │
+│      └─ library-index.json      │
+└─────────────────────────────────┘
+```
+
+### Shared Patterns
+
+All repositories share:
+- Same CSS/branding (Wranngle colors, Outfit/Inter fonts)
+- Same LLM integration (Gemini primary, Groq fallback)
+- Same Mustache templating approach
+- Same Ajv validation patterns
+- Same file organization (`input/`, `output/{company}/`)
+
+---
+
 ## License
 
 MIT License - See LICENSE file for details
