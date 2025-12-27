@@ -70,7 +70,6 @@ program
   .option('--skip-pdf', 'Skip PDF generation')
   .option('--save-json', 'Save intermediate JSON')
   .option('--use-groq', 'Use Groq API')
-  .option('--llm-polish', 'Use LLM for final polish (slower, default: manual polish)')
   .option('-f, --force', 'Force generation')
   .action(async (auditPath, outputArg, options) => {
     try {
@@ -127,7 +126,6 @@ program
         skipPdf: options.skipPdf,
         saveJson: options.saveJson,
         useGroq: options.useGroq,
-        llmPolish: options.llmPolish,
         force: options.force
       });
 
