@@ -1,5 +1,7 @@
 # AI Proposal Generator
 
+> ⚠️ **DEPRECATED**: This project has been superseded and is no longer maintained. This repository is archived for historical reference only.
+
 Generate professional 2-page client-facing proposals from AI Process Audit reports.
 
 ## Overview
